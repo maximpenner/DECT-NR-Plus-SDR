@@ -1,3 +1,3 @@
 [submodule "json"]
 	path = json
-	url = https://github.com/maxpenner/DECT-NR-Plus-SDR-JSON
+	url = https://github.com/maximpenner/DECT-NR-Plus-SDR-JSON

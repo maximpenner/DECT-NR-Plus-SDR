@@ -23,7 +23,7 @@
 echo "Starting!"
 
 # get the source code
-sudo -u "$SUDO_USER" git clone --recurse-submodules https://github.com/maxpenner/DECT-NR-Plus-SDR
+sudo -u "$SUDO_USER" git clone --recurse-submodules https://github.com/maximpenner/DECT-NR-Plus-SDR
 
 # build
 cd DECT-NR-Plus-SDR

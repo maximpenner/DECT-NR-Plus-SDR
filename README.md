@@ -124,7 +124,7 @@ The SDR has been tested on Ubuntu 22.04 and 24.04 (Intel and AMD x86-64) and Ras
 Installation instructions for these dependencies can be found in [install_dependencies.sh](scripts/install_dependencies.sh). After installing the dependencies, the SDR can be either downloaded and compiled with [install_sdr.sh](scripts/install_sdr.sh), or manually with: 
 
 ```shell
-git clone --recurse-submodules https://github.com/maxpenner/DECT-NR-Plus-SDR
+git clone --recurse-submodules https://github.com/maximpenner/DECT-NR-Plus-SDR
 cd DECT-NR-Plus-SDR
 mkdir build
 cd build
@@ -318,31 +318,31 @@ Another option is to disable resampling entirely and generate DECT NR+ packets d
 
 ## Synchronization
 
-Synchronization of packets based on the STF is described in [DECT-NR-Plus-Simulation](https://github.com/maxpenner/DECT-NR-Plus-Simulation?tab=readme-ov-file#synchronization). According to the DECT NR+ standard, the STF cover sequence can be disabled for testing purposes. In the SDR, this is done by changing the following line in [stf_param.hpp](lib/include/dectnrp/sections_part3/stf_param.hpp) and recompiling:
+Synchronization of packets based on the STF is described in [DECT-NR-Plus-Link-Level-Simulation](https://github.com/maximpenner/DECT-NR-Plus-Link-Level-Simulation?tab=readme-ov-file#synchronization). According to the DECT NR+ standard, the STF cover sequence can be disabled for testing purposes. In the SDR, this is done by changing the following line in [stf_param.hpp](lib/include/dectnrp/sections_part3/stf_param.hpp) and recompiling:
 
 ``` C++
 // #define SECTIONS_PART_3_STF_COVER_SEQUENCE_ACTIVE
 ```
 
-For the SDR, synchronization is more reliable if no cover sequence is applied to the STF. This is due to the [coarse metric without a cover sequence being wider](https://github.com/maxpenner/DECT-NR-Plus-Simulation?tab=readme-ov-file#synchronization), and thus harder to miss.
+For the SDR, synchronization is more reliable if no cover sequence is applied to the STF. This is due to the [coarse metric without a cover sequence being wider](https://github.com/maximpenner/DECT-NR-Plus-Link-Level-Simulation?tab=readme-ov-file#synchronization), and thus harder to miss.
 
 ## Compatibility
 
-Packets generated with the SDR are compatible with the MATLAB code in [DECT-NR-Plus-Simulation](https://github.com/maxpenner/DECT-NR-Plus-Simulation). The SDR also has been tested with commercially available DECT NR+ solutions.
+Packets generated with the SDR are compatible with the MATLAB code in [DECT-NR-Plus-Link-Level-Simulation](https://github.com/maximpenner/DECT-NR-Plus-Link-Level-Simulation). The SDR also has been tested with commercially available DECT NR+ solutions.
 
 ## JSON Export
 
 Each worker pool can export JSON files with information about received DECT NR+ packets. The export is activated by changing the value of `"json_export_length"` in `phy.json` to 100 or higher, i.e. the worker pool collects information of at least 100 packets before exporting all in a single JSON file. To enable the export without jeopardizing the real-time operation of the SDR, the worker pool must have at least two instances of [worker_tx_rx_t](lib/include/dectnrp/phy/pool/worker_tx_rx.hpp). This way, at least one worker can continue processing IQ samples while another worker saves a JSON file.
 
-Exported files can be analyzed with [DECT-NR-Plus-SDR-json](https://github.com/maxpenner/DECT-NR-Plus-SDR-json.git).
+Exported files can be analyzed with [DECT-NR-Plus-SDR-JSON](https://github.com/maximpenner/DECT-NR-Plus-SDR-JSON.git).
 
 ## PPS Export and PTP
 
 With the [GPIOs of an USRP](https://files.ettus.com/manual/page_gpio_api.html), the SDR can create pulses that are synchronized to DECT NR+ events, for instance the beginning of a wirelessly received beacon. The generation of pulses is controlled by each firmware individually. The example [firmware p2p](#p2p) contains logic to export one pulse per second (PPS).
 
-A PPS signal itself is a frequently used clock for other systems. For example, a Raspberry Pi can be disciplined with a PPS and at the same time act as a PTP source which itself operates synchronously with the PPS ([pi5-pps-ptp](https://github.com/maxpenner/pi5-pps-ptp)). Such a PTP source can then be used to discipline further systems:
+A PPS signal itself is a frequently used clock for other systems. For example, a Raspberry Pi can be disciplined with a PPS and at the same time act as a PTP source which itself operates synchronously with the PPS ([pi5-pps-ptp](https://github.com/maximpenner/pi5-pps-ptp)). Such a PTP source can then be used to discipline further systems:
 
-- The SDR's [host computer can synchronize to PTP](https://github.com/maxpenner/pi5-pps-ptp/blob/main/docs/client.md) such that the operating system time and the USRP sample count run synchronously.
+- The SDR's [host computer can synchronize to PTP](https://github.com/maximpenner/pi5-pps-ptp/blob/main/docs/client.md) such that the operating system time and the USRP sample count run synchronously.
 - The PPS is stable enough to allow deriving higher clock speeds, for instance 48kHz for distributed wireless audio applications.
 - The SDR can also be synchronized to an existing PTP network by converting [PTP to a 10MHz and 1PPS signal](https://www.meinberg.de/german/products/ntp-ptp-signalkonverter.htm), and feeding these to the USRP.
 
