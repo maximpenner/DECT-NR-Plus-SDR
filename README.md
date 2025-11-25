@@ -228,6 +228,7 @@ Furthermore, most SDRs are general-purpose devices with limitations regarding ty
 - If the SNR is low despite a high receive power, [resampling](#resampling) has to be tuned. To rule out any other causes, resampling may also be deactivated for testing purposes.
 - DPDK and SDR threads should run on separate cores.
 - For the best possible performance in terms of PER, the spectrum the SDR operates in should be interference-free.
+- The script [rts.sh](scripts/rts.sh) must be executed to fix this [UHD issue](https://kb.ettus.com/Getting_Started_with_DPDK_and_UHD#Underruns_Every_Second_with_DPDK_.2B_Ubuntu).
 
 ## Architecture
 
