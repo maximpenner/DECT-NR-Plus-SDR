@@ -29,6 +29,7 @@
 #include "dectnrp/upper/loopback/tfw_loopback_mmie.hpp"
 #include "dectnrp/upper/loopback/tfw_loopback_ratio.hpp"
 #include "dectnrp/upper/loopback/tfw_loopback_snr.hpp"
+#include "dectnrp/upper/nrf/tfw_nrf.hpp"
 #include "dectnrp/upper/p2p/tfw_p2p_ft.hpp"
 #include "dectnrp/upper/p2p/tfw_p2p_pt.hpp"
 #include "dectnrp/upper/rtt/tfw_rtt.hpp"
@@ -96,6 +97,9 @@ void upper_t::add_tpoint(const tpoint_config_t& tpoint_config, phy::mac_lower_t&
 
     } else if (TFW_NAME_STARTS_WITH(tfw::loopback::tfw_loopback_snr_t::firmware_name)) {
         layer_unit_vec.push_back(std::make_unique<tfw::loopback::tfw_loopback_snr_t>(TFW_ARGS));
+
+    } else if (TFW_NAME_STARTS_WITH(tfw::nrf::tfw_nrf_t::firmware_name)) {
+        layer_unit_vec.push_back(std::make_unique<tfw::nrf::tfw_nrf_t>(TFW_ARGS));
 
     } else if (TFW_NAME_STARTS_WITH(tfw::p2p::tfw_p2p_ft_t::firmware_name)) {
         layer_unit_vec.push_back(std::make_unique<tfw::p2p::tfw_p2p_ft_t>(TFW_ARGS));
