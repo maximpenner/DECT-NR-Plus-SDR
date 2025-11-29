@@ -39,6 +39,7 @@ Advanced Topics
 6. [Compatibility](#compatibility)
 7. [JSON Export](#json-export)
 8. [PPS Export and PTP](#pps-export-and-ptp)
+    1. [TSN](#tsn)
 9. [Performance Tuning](#performance-tuning)
     1. [Host](#host)
     2. [Interface Host-to-SDR](#interface-host-to-sdr)
@@ -350,6 +351,10 @@ A PPS signal itself is a frequently used clock for other systems. For example, a
 <p align="center">
   <img src="docs/synchronization.drawio.png" style="width: 75%; background-color: transparent;" alt="docs/synchronization.drawio.png"/>
 </p>
+
+### TSN
+
+When a complete DECT NR+ network is synchronized as shown above, the first basic component of TSN, namely time synchronization, is established. The second component, scheduling and traffic shaping, can be implemented under Linux using [qdiscs](https://tsn.readthedocs.io/qdiscs.html). The third component, selection and reservation of communication paths, can be provided by the SDR via firmware as scheduled uplink and downlink radio resources between different addressable SDRs.
 
 ## Performance Tuning
 
