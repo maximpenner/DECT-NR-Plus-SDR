@@ -48,10 +48,11 @@ Advanced Topics
     1. [basic](#basic)
     2. [chscanner](#chscanner)
     3. [loopback](#loopback)
-    4. [p2p](#p2p)
-    5. [rtt](#rtt)
-    6. [txrxagc](#txrxagc)
-    7. [txrxdelay](#txrxdelay)
+    4. [nrf](#nrf)
+    5. [p2p](#p2p)
+    6. [rtt](#rtt)
+    7. [txrxagc](#txrxagc)
+    8. [txrxdelay](#txrxdelay)
 11. [Interesting Links](#interesting-links)
 
 ## Core Idea
@@ -410,6 +411,10 @@ This firmware starts channel measurements in regular intervals and writes the re
 ### [loopback](lib/include/dectnrp/upper/loopback/tfw_loopback.hpp)
 
 This is a firmware family. Each individual firmware is a simulation with a single device looping its TX signal back into its own RX path. It is used to test SDR functionality such as synchronization and packet error rates (PERs) over SNR. The wireless channel model can be switched in [radio.json](configurations/loopback_simulator/radio.json)  from an AWGN channel to a doubly selective Rayleigh fading channel.
+
+### [nrf](lib/include/dectnrp/upper/nrf/tfw_nrf.hpp)
+
+Firmware to receive packets from nRF91 SiPs.
 
 ### [p2p](lib/include/dectnrp/upper/p2p/tfw_p2p_rd.hpp)
 
