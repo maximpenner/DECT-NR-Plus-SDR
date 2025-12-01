@@ -79,19 +79,6 @@ radio_device_class_t get_radio_device_class(const std::string& radio_device_clas
         // set to 16 to be standard compliant
         q.PacketLength_min = 4;
 
-    } else if (radio_device_class_string.compare("2.8.2.A") == 0) {
-        q.u_min = 2;
-        q.b_min = 8;
-        q.N_TX_min = 2;
-        q.mcs_index_min = 7;
-        q.M_DL_HARQ_min = 8;
-        q.M_connection_DL_HARQ_min = 2;
-        q.N_soft_min = 25344;
-        q.Z_min = 6144;
-
-        // set to 16 to be standard compliant
-        q.PacketLength_min = 4;
-
     } else if (radio_device_class_string.compare("2.12.4.A") == 0) {
         q.u_min = 2;
         q.b_min = 12;

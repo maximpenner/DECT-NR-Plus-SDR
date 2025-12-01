@@ -355,7 +355,7 @@ A PPS signal itself is a frequently used clock for other systems. For example, a
 
 ### TSN
 
-When a complete DECT NR+ network is synchronized as shown above, the first basic component of TSN, namely time synchronization, is established. The second component, scheduling and traffic shaping, can be implemented under Linux using [qdiscs](https://tsn.readthedocs.io/qdiscs.html). The third component, selection and reservation of communication paths, can be provided by the SDR via firmware as scheduled uplink and downlink radio resources between different addressable SDRs.
+When a complete DECT NR+ network is synchronized as shown above, the first component of TSN, namely time synchronization, is established. The second component, scheduling and traffic shaping, can be implemented under Linux using [qdiscs](https://tsn.readthedocs.io/qdiscs.html) which feed IP packets to the SDR through a VNIC. The third component, selection and reservation of communication paths, is provided by the SDR via firmware as scheduled uplink and downlink radio resources between different addressable SDRs.
 
 ## Performance Tuning
 
@@ -394,7 +394,6 @@ The use of spinlocks and/or busy waiting requires proper planning of CPU affinit
 - [buffer_rx.hpp](/lib/include/dectnrp/radio/buffer_rx.hpp)
 - [buffer_tx.hpp](/lib/include/dectnrp/radio/buffer_tx.hpp)
 - [watch.hpp](/lib/include/dectnrp/common/thread/watch.hpp) (only additional busy wait methods)
-
 
 ## Firmware
 

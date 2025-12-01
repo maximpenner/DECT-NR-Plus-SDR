@@ -217,9 +217,12 @@ int run_test(std::string radio_device_class_string) {
 int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv) {
     std::srand(time(NULL));
 
-    const std::vector<std::string> rdc_vec = {
-        "1.1.1.A", "8.1.1.A", "1.8.1.A", "2.8.2.A", "2.12.4.A",  //"8.12.8.A", "8.16.8.A"
-    };
+    const std::vector<std::string> rdc_vec = {"1.1.1.A",
+                                              "1.1.1.B",
+                                              "8.1.1.A",
+                                              "1.8.1.A",
+                                              "2.12.4.A",
+                                              "2.12.4.B" /*, "8.12.8.A", "8.16.8.A"*/};
 
     for (auto rdc : rdc_vec) {
         if (run_test(rdc)) {
