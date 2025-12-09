@@ -1,7 +1,7 @@
 {
   "WORKERPOOL0":
   {
-    "radio_device_class_string": "1.1.1.A",
+    "radio_device_class_string": "../configurations/nrf_usrpB210/rdc.json",
     "os_min": 2,
     "enforce_dectnrp_samp_rate_by_resampling": true,
     "nof_jobs": 64,

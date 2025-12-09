@@ -1,0 +1,15 @@
+{
+  "RDC":
+  {
+    "radio_device_class_string": "1.1.1.A",
+    "u_min": 1,
+    "b_min": 1,
+    "N_TX_min": 1,
+    "mcs_index_min": 5,
+    "M_DL_HARQ_min": 8,
+    "M_connection_DL_HARQ_min": 8,
+    "N_soft_min": 225344,
+    "Z_min": 2048,
+    "PacketLength_min": 16
+  }
+}

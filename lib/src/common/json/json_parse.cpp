@@ -55,15 +55,21 @@ std::string read_string(const nlohmann::ordered_json::iterator& it, const std::s
     return ret;
 }
 
-int32_t read_int(const nlohmann::ordered_json::iterator& it,
-                 const std::string field,
-                 const int32_t val_min,
-                 const int32_t val_max) {
+int32_t read_int(const nlohmann::ordered_json::iterator& it, const std::string field) {
     dectnrp_assert((*it)[field].is_number_integer(),
                    "JSON field {} not an integer or undefined. Check for typos.",
                    field);
 
     const int32_t ret = (*it)[field];
+
+    return ret;
+}
+
+int32_t read_int(const nlohmann::ordered_json::iterator& it,
+                 const std::string field,
+                 const int32_t val_min,
+                 const int32_t val_max) {
+    const int32_t ret = read_int(it, field);
 
     dectnrp_assert(val_min <= ret && ret <= val_max, "Integer {} out of bound", field);
 

@@ -20,6 +20,9 @@
 
 #include "dectnrp/sections_part3/radio_device_class.hpp"
 
+#include <bit>
+
+#include "dectnrp/common/json/json_parse.hpp"
 #include "dectnrp/common/prog/assert.hpp"
 
 namespace dectnrp::sp3 {
@@ -132,8 +135,40 @@ radio_device_class_t get_radio_device_class(const std::string& radio_device_clas
         q.PacketLength_min = 16;
 
     } else {
-        dectnrp_assert_failure("Unknown Radio Device Class {}", radio_device_class_string);
+        // must be a filepath
+        nlohmann::ordered_json json = common::jsonparse::parse(radio_device_class_string);
+
+        auto it = json.begin();
+
+        dectnrp_assert(it.key().starts_with("RDC"), "incorrect prefix for key {}", it.key());
+
+        q.radio_device_class_string =
+            common::jsonparse::read_string(it, "radio_device_class_string");
+        q.u_min = common::jsonparse::read_int(it, "u_min");
+        q.b_min = common::jsonparse::read_int(it, "b_min");
+        q.N_TX_min = common::jsonparse::read_int(it, "N_TX_min");
+        q.mcs_index_min = common::jsonparse::read_int(it, "mcs_index_min");
+        q.M_DL_HARQ_min = common::jsonparse::read_int(it, "M_DL_HARQ_min");
+        q.M_connection_DL_HARQ_min = common::jsonparse::read_int(it, "M_connection_DL_HARQ_min");
+        q.N_soft_min = common::jsonparse::read_int(it, "N_soft_min");
+        q.Z_min = common::jsonparse::read_int(it, "Z_min");
+        q.PacketLength_min = common::jsonparse::read_int(it, "PacketLength_min");
     }
+
+    dectnrp_assert(std::has_single_bit(q.u_min) && q.u_min <= 8, "u undefined");
+    dectnrp_assert((std::has_single_bit(q.b_min) && q.b_min <= 16) || q.b_min == 12, "b undefined");
+    dectnrp_assert(std::has_single_bit(q.N_TX_min) && q.N_TX_min <= 8, "N_TX_min undefined");
+    dectnrp_assert(q.mcs_index_min <= 11, "mcs_index_min undefined");
+
+    // the following three limitations are arbitrary
+    dectnrp_assert(1 <= q.M_DL_HARQ_min && q.M_DL_HARQ_min <= 64, "M_DL_HARQ_min undefined");
+    dectnrp_assert(1 <= q.M_connection_DL_HARQ_min && q.M_connection_DL_HARQ_min <= 64,
+                   "M_connection_DL_HARQ_min undefined");
+    dectnrp_assert(25344 <= q.N_soft_min && q.N_soft_min <= 16777216, "N_soft_min undefined");
+
+    dectnrp_assert(q.Z_min == 2048 || q.Z_min == 6144, "Z_min undefined");
+    dectnrp_assert(1 <= q.PacketLength_min && q.PacketLength_min <= 16,
+                   "PacketLength_min undefined");
 
     return q;
 }

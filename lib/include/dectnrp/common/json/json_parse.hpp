@@ -34,6 +34,8 @@ bool read_bool(const nlohmann::ordered_json::iterator& it, const std::string fie
 
 std::string read_string(const nlohmann::ordered_json::iterator& it, const std::string field);
 
+int32_t read_int(const nlohmann::ordered_json::iterator& it, const std::string field);
+
 int32_t read_int(const nlohmann::ordered_json::iterator& it,
                  const std::string field,
                  const int32_t val_min,
