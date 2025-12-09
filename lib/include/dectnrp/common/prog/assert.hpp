@@ -79,3 +79,6 @@ namespace dectnrp::assert {
 
 #define dectnrp_assert(condition, fmtstr, ...) \
     DECTNRP_ALWAYS_ASSERT_IFDEF__(ENABLE_ASSERT, condition, fmtstr, ##__VA_ARGS__)
+
+#define dectnrp_assert_no_msg(condition, ...) \
+    DECTNRP_ALWAYS_ASSERT_IFDEF__(ENABLE_ASSERT, condition, "", ##__VA_ARGS__)
