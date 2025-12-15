@@ -22,34 +22,30 @@
 
 #include "dectnrp/common/prog/assert.hpp"
 #include "dectnrp/common/prog/log.hpp"
+#include "dectnrp/sections_part2/channel_arrangement.hpp"
 
 namespace dectnrp::upper::tfw::nrf {
 
 const std::string tfw_nrf_t::firmware_name("nrf");
 
 tfw_nrf_t::tfw_nrf_t(const tpoint_config_t& tpoint_config_, phy::mac_lower_t& mac_lower_)
-    : tpoint_t(tpoint_config_, mac_lower_) {}
+    : tpoint_t(tpoint_config_, mac_lower_) {
+    const auto acfn = sp2::get_absolute_channel_frequency_numbering(1);
+    const auto center_frequency = sp2::get_center_frequency(acfn, 1657);
 
-phy::irregular_report_t tfw_nrf_t::work_start(const int64_t start_time_64) {
-    dectnrp_assert(0 <= start_time_64, "start_time_64 too small");
+    // set frequency, TX and RX power
+    hw.set_command_time();
+    hw.set_tx_power_ant_0dBFS_uniform_tc(-1000.0f);
+    hw.set_rx_power_ant_0dBFS_uniform_tc(-30.0f);
+    hw.set_freq_tc(center_frequency.FC);
+}
 
-    // value has no other function than being used in dectnrp_assert()
-    barrier_time_64 = start_time_64;
-
+phy::irregular_report_t tfw_nrf_t::work_start([[maybe_unused]] const int64_t start_time_64) {
     return phy::irregular_report_t();
 }
 
-phy::machigh_phy_t tfw_nrf_t::work_regular(const phy::regular_report_t& regular_report) {
-    dectnrp_assert(barrier_time_64 < regular_report.chunk_time_end_64,
-                   "chunk_time_end_64 not strictly increasing");
-
-    dectnrp_assert(barrier_time_64 < regular_report.barrier_time_64,
-                   "barrier_time_64 not strictly increasing");
-
-    // values have no other function than being used in dectnrp_assert()
-    barrier_time_64 = regular_report.barrier_time_64;
-    sync_time_last_64 = regular_report.sync_time_last_64;
-
+phy::machigh_phy_t tfw_nrf_t::work_regular(
+    [[maybe_unused]] const phy::regular_report_t& regular_report) {
     return phy::machigh_phy_t();
 }
 
@@ -59,11 +55,13 @@ phy::machigh_phy_t tfw_nrf_t::work_irregular(
 }
 
 phy::maclow_phy_t tfw_nrf_t::work_pcc(const phy::phy_maclow_t& phy_maclow) {
-    dectnrp_assert(sync_time_last_64 < phy_maclow.sync_report.fine_peak_time_64,
-                   "sync_time_last_64 out-of-order");
+    if (phy_maclow.pcc_report.plcf_decoder.get_plcf_base(1) != nullptr) {
+        parse_and_log_type_1(phy_maclow);
+    }
 
-    dectnrp_assert(barrier_time_64 <= phy_maclow.sync_report.fine_peak_time_64,
-                   "fine_peak_time_64 before barrier_time_64");
+    if (phy_maclow.pcc_report.plcf_decoder.get_plcf_base(2) != nullptr) {
+        parse_and_log_type_2(phy_maclow);
+    }
 
     return phy::maclow_phy_t();
 }
@@ -87,5 +85,55 @@ phy::machigh_phy_tx_t tfw_nrf_t::work_channel([[maybe_unused]] const phy::chscan
 }
 
 void tfw_nrf_t::work_stop() { dectnrp_log_inf("work_stop() called"); }
+
+void tfw_nrf_t::parse_and_log_type_1(const phy::phy_maclow_t& phy_maclow) const {
+    // base pointer to extract PLCF_type
+    const auto* plcf_base = phy_maclow.pcc_report.plcf_decoder.get_plcf_base(1);
+
+    dectnrp_assert_no_msg(plcf_base != nullptr);
+
+    // is this the correct header type?
+    if (plcf_base->get_HeaderFormat() != 0) {
+        return;
+    }
+
+    // cast guaranteed to work
+    const auto* plcf_10 = static_cast<const sp4::plcf_10_t*>(plcf_base);
+
+    dectnrp_log_inf("Type 10: TransmitterIdentity={} ShortNetworkID={} STF_time={}",
+                    plcf_10->TransmitterIdentity,
+                    plcf_10->ShortNetworkID,
+                    phy_maclow.sync_report.fine_peak_time_corrected_by_sto_fractional_64);
+}
+
+void tfw_nrf_t::parse_and_log_type_2(const phy::phy_maclow_t& phy_maclow) const {
+    // base pointer to extract PLCF_type
+    const auto* plcf_base = phy_maclow.pcc_report.plcf_decoder.get_plcf_base(2);
+
+    dectnrp_assert_no_msg(plcf_base != nullptr);
+
+    // is this the correct header type?
+    if (plcf_base->get_HeaderFormat() == 0) {
+        // cast guaranteed to work
+        const auto* plcf_20 = static_cast<const sp4::plcf_20_t*>(plcf_base);
+
+        dectnrp_log_inf(
+            "Type 20: TransmitterIdentity={} ShortNetworkID={} ReceiverIdentity={} STF_time={}",
+            plcf_20->TransmitterIdentity,
+            plcf_20->ShortNetworkID,
+            plcf_20->ReceiverIdentity,
+            phy_maclow.sync_report.fine_peak_time_corrected_by_sto_fractional_64);
+    } else if (plcf_base->get_HeaderFormat() == 1) {
+        // cast guaranteed to work
+        const auto* plcf_21 = static_cast<const sp4::plcf_21_t*>(plcf_base);
+
+        dectnrp_log_inf(
+            "Type 21: TransmitterIdentity={} ShortNetworkID={} ReceiverIdentity={} STF_time={}",
+            plcf_21->TransmitterIdentity,
+            plcf_21->ShortNetworkID,
+            plcf_21->ReceiverIdentity,
+            phy_maclow.sync_report.fine_peak_time_corrected_by_sto_fractional_64);
+    }
+}
 
 }  // namespace dectnrp::upper::tfw::nrf

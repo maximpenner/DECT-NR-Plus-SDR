@@ -51,8 +51,8 @@ class tfw_nrf_t final : public tpoint_t {
         void work_stop() override final;
 
     private:
-        int64_t sync_time_last_64{common::adt::UNDEFINED_EARLY_64};
-        int64_t barrier_time_64{common::adt::UNDEFINED_EARLY_64};
+        void parse_and_log_type_1(const phy::phy_maclow_t& phy_maclow) const;
+        void parse_and_log_type_2(const phy::phy_maclow_t& phy_maclow) const;
 };
 
 }  // namespace dectnrp::upper::tfw::nrf
