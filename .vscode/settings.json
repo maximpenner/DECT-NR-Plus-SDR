@@ -1,6 +1,7 @@
 {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+    "editor.detectIndentation": false,
     "[json]": {
         "editor.formatOnSave": true
     },
