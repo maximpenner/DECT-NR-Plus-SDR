@@ -413,7 +413,7 @@ This is a firmware family. Each individual firmware is a simulation with a singl
 
 ### [nrf](lib/include/dectnrp/upper/nrf/tfw_nrf.hpp)
 
-This firmware demonstrates how to receive packets from nRF91 SiPs. It scans ACFN=1657 (see ETSI TS 103 636-2 for channel numbering) and writes data to the log file. The ACFN can be changed in [tfw_nrf.cpp](lib/src/upper/nrf/tfw_nrf.cpp).
+This firmware demonstrates how to receive packets from nRF91 SiPs. It scans ACFN=1657 (see ETSI TS 103 636-2 for channel numbering) and writes data to the log file. The ACFN can be changed in [tfw_nrf.cpp](lib/src/upper/nrf/tfw_nrf.cpp). Note that decoding the PDC requires the complete 32-bit network ID for scrambling on the PHY. It must either be hard-coded into the firmware or extracted from the PCC and MAC common header, specifically the beacon header.
 
 ### [p2p](lib/include/dectnrp/upper/p2p/tfw_p2p_rd.hpp)
 
