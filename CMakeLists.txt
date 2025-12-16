@@ -67,6 +67,7 @@ option(AUTO_DETECT_ISA    "Autodetect supported ISA extensions"       ON)
 option(BUILD_STATIC       "Attempt to statically link external deps"  OFF)
 option(ENABLE_ASSERT      "Enable asserts"                            ON)
 option(ENABLE_LOG         "Enable logging into file"                  ON)
+option(ENABLE_PCAP        "Enable PCAP export to Wireshark"           OFF)
 
 if (ENABLE_WERROR)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
@@ -86,6 +87,12 @@ endif()
 
 if (ENABLE_LOG)
     add_definitions(-DENABLE_LOG)
+endif()
+
+if (ENABLE_PCAP)
+    # sudo apt install libssl-dev
+    # sudo apt install libtins-dev
+    find_package(libtins REQUIRED)
 endif()
 
 ########################################################################
