@@ -211,26 +211,24 @@ namespace dectnrp::phy {
 #define RX_SYNCED_PARAM_WEIGHTS_TYPE_INTERNAL std::complex<double>
 #endif
 
-// clang-format off
 /// default values for Wiener filter statistics
 #define RX_SYNCED_PARAM_NU_MAX_HZ_VEC {100.0, 100.0, 500.0f}
 #define RX_SYNCED_PARAM_TAU_RMS_SEC_VEC {0.1e-6, 0.1e-6, 1.0e-6}
 
 /**
- * \brief For channel estimation based on a Wiener filter, the SNR determines the amount of smoothing
- * that is applied between individual DRS symbols. At low SNR, smoothing is increased. For optimal
- * performance, it is best to precalculate multiple Wiener filters for different SNRs, estimate the
- * instantaneous SNR during decoding and the pick the best fitting Wiener filter.
+ * \brief For channel estimation based on a Wiener filter, the SNR determines the amount of
+ * smoothing that is applied between individual DRS symbols. At low SNR, smoothing is increased. For
+ * optimal performance, it is best to precalculate multiple Wiener filters for different SNRs,
+ * estimate the instantaneous SNR during decoding and the pick the best fitting Wiener filter.
  */
 #define RX_SYNCED_PARAM_SNR_DB_VEC {-5.0, 15.0, 35.0}
 
 /**
- * \brief Number of consecutive DRS pilots used for interpolation, with pilots being interlaced for mode
- * lr. Determines the computational complexity of interpolation.
+ * \brief Number of consecutive DRS pilots used for interpolation, with pilots being interlaced for
+ * mode lr. Determines the computational complexity of interpolation.
  */
 #define RX_SYNCED_PARAM_NOF_DRS_INTERP_LR_VEC {14, 8, 3}
 #define RX_SYNCED_PARAM_NOF_DRS_INTERP_L_VEC {7, 4, 2}
-// clang-format on
 
 /// optimization flags to speed up LUT generation
 #define RX_SYNCED_PARAM_CHANNEL_LUT_OPT_INDEX_PREVIOUS

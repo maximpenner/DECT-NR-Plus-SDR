@@ -123,7 +123,7 @@ The SDR has been tested on Ubuntu 22.04 and 24.04 (Intel and AMD x86-64) and Ras
 - [VOLK](https://github.com/gnuradio/volk): SIMD
 - [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page): Matrix Inversion
 
-Installation instructions for these dependencies can be found in [install_dependencies.sh](scripts/install_dependencies.sh). After installing the dependencies, the SDR can be either downloaded and compiled with [install_sdr.sh](scripts/install_sdr.sh), or manually with: 
+Installation instructions for these dependencies can be found in [install_dependencies.sh](scripts/install_dependencies.sh). After installing the dependencies, the SDR can be either downloaded and compiled (GCC >=13.3.0, Clang >=14.2.0) with [install_sdr.sh](scripts/install_sdr.sh), or manually with: 
 
 ```shell
 git clone --recurse-submodules https://github.com/maximpenner/DECT-NR-Plus-SDR

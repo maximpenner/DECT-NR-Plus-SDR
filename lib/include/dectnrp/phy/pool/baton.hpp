@@ -55,7 +55,7 @@ class baton_t {
         static constexpr uint32_t BATON_WAIT_TIMEOUT_MS{100};
 
         /**
-         * \brief Called by worker_pool_t with its associated tpoint and token. This class with use
+         * \brief Called by worker_pool_t with its associated tpoint and token. This class will use
          * that information to call the tpoint function work_start().
          *
          * \param tpoint_

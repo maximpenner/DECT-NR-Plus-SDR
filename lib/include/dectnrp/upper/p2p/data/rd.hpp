@@ -39,13 +39,17 @@
 
 #define APPLICATION_INTERFACE_VNIC_OR_SOCKET
 
+// uncomment to activate the export of a PPS at the GPIOs at both the FT and PT
 // #define TFW_P2P_EXPORT_PPX
-#ifndef RADIO_HW_IMPLEMENTS_GPIO_TOGGLE
-#undef TFW_P2P_EXPORT_PPX
-#endif
 
 #ifdef TFW_P2P_EXPORT_PPX
+#include "dectnrp/radio/hw.hpp"
+#ifdef RADIO_HW_IMPLEMENTS_GPIO_TOGGLE
 #include "dectnrp/mac/ppx/ppx.hpp"
+#else
+#undef TFW_P2P_EXPORT_PPX
+#error "Hardware does not implement GPIO toggling."
+#endif
 #endif
 
 // #define TFW_P2P_VARIABLE_MCS
