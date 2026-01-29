@@ -109,7 +109,8 @@ hw_usrp_t::hw_usrp_t(const hw_config_t& hw_config_)
         gain_lut.powers_rx_dBm = &calibration::n320::powers_rx_dBm;
         gain_lut.gains_rx_dB_step = calibration::n320::gains_rx_dB_step;
 
-    } else if (device_addrs.at(0).get("product", "") == "B210") {
+    } else if (device_addrs.at(0).get("product", "") == "B210" ||
+               device_addrs.at(0).get("product", "") == "B205mini") {
         // B210 supports arbitrary master clocks, so we neither need a fixed master clock nor
         // decimation factors
         master_clock_rate = 55296000;
@@ -168,7 +169,8 @@ hw_usrp_t::hw_usrp_t(const hw_config_t& hw_config_)
 
 void hw_usrp_t::set_samp_rate(const uint32_t samp_rate_in) {
     // B-series supports arbitrary sample rates
-    if (device_addrs.at(0).get("product", "") == "B210") {
+    if (device_addrs.at(0).get("product", "") == "B210" ||
+        device_addrs.at(0).get("product", "") == "B205mini") {
         samp_rate = samp_rate_in;
     }
     /* The following code is only relevant for N- and X-series, which have only one or two fixed
@@ -266,7 +268,8 @@ void hw_usrp_t::initialize_device() {
                         device_addrs.at(0).get("product", ""));
 #endif
 
-    } else if (device_addrs.at(0).get("product", "") == "B210") {
+    } else if (device_addrs.at(0).get("product", "") == "B210" ||
+               device_addrs.at(0).get("product", "") == "B205mini") {
         dectnrp_assert(nof_antennas == 1 || nof_antennas == 2, "Incorrect number of antennas.");
 
         if (nof_antennas == 1) {
@@ -341,7 +344,8 @@ void hw_usrp_t::initialize_device() {
     dectnrp_assert(m_usrp->get_rx_num_channels() == nof_antennas,
                    "Number of RX channels is not the same as the number of antennas requested.");
     dectnrp_assert(!(m_usrp->get_master_clock_rate() != static_cast<double>(master_clock_rate) &&
-                     device_addrs.at(0).get("product", "") != "B210"),
+                     (device_addrs.at(0).get("product", "") != "B210" &&
+                      device_addrs.at(0).get("product", "") != "B205mini")),
                    "Master Clock set incorrectly");
 
     set_command_time();
@@ -357,7 +361,8 @@ void hw_usrp_t::initialize_device() {
     // assert
     if (m_usrp->get_tx_rate() != samp_rate_d) {
         // small mismatch for B210
-        if (device_addrs.at(0).get("product", "") == "B210") {
+        if (device_addrs.at(0).get("product", "") == "B210" ||
+            device_addrs.at(0).get("product", "") == "B205mini") {
             dectnrp_assert(std::round(m_usrp->get_tx_rate()) == samp_rate_d,
                            "TX sample rate not set correctly");
         } else {
@@ -366,7 +371,8 @@ void hw_usrp_t::initialize_device() {
     }
     if (m_usrp->get_rx_rate() != samp_rate_d) {
         // small mismatch for B210
-        if (device_addrs.at(0).get("product", "") == "B210") {
+        if (device_addrs.at(0).get("product", "") == "B210" ||
+            device_addrs.at(0).get("product", "") == "B205mini") {
             dectnrp_assert(std::round(m_usrp->get_rx_rate()) == samp_rate_d,
                            "RX sample rate not set correctly");
         } else {

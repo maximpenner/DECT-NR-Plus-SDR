@@ -347,7 +347,11 @@ void steady_rd_t::worksub_callback_ppx(const int64_t now_64,
     dectnrp_assert(
         std::abs(pulse_config.rising_edge_64 - rd.ppx.get_ppx_time_advance_samples() - next_64) <
             duration_lut.get_N_samples_from_duration(sp3::duration_ec_t::ms001, 5),
-        "callback adjustment time too large");
+        "callback adjustment time too large {} {} {} {}",
+        pulse_config.rising_edge_64,
+        rd.ppx.get_ppx_time_advance_samples(),
+        next_64,
+        duration_lut.get_N_samples_from_duration(sp3::duration_ec_t::ms001, 5));
 
     // set time of next callback
     next_64 = pulse_config.rising_edge_64 - rd.ppx.get_ppx_time_advance_samples();
