@@ -101,7 +101,7 @@ std::pair<common::ant_t, common::ant_t> tpoint_t::worksub_agc_adj(
                                       hw_local.get_rx_power_ant_0dBFS(),
                                       sync_report.rms_array);
 #else
-    const float tx_power_adj_dB = 0.0f;
+    const common::ant_t tx_power_adj_dB = common::ant_t(hw_local.get_nof_antennas());
 #endif
 
 #ifdef AGC_RX_PT
